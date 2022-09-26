@@ -1,0 +1,1 @@
+t := Array new: 2.t at: 1 put: #quelquechose.t at: 1.c := OrderedCollection new: 4.1 to: 20 do: [:i | c add: i].c.
