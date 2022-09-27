@@ -15,11 +15,13 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.internal.compiler.flow.FinallyFlowContext;
 
 import rendutp1.visitor.MethodDeclarationVisitor;
 import rendutp1.visitor.MethodInvocationVisitor;
@@ -35,7 +37,8 @@ public class Parser {
 
 	public static void main(String[] args) throws IOException {
 		
-		TypeDeclarationVisitor visitor1 = new TypeDeclarationVisitor();
+		TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
+		MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
 		// read java files
 		final File folder = new File(projectSourcePath);
 		ArrayList<File> javaFiles = listJavaFilesForFolder(folder);
@@ -45,11 +48,11 @@ public class Parser {
 			String content = FileUtils.readFileToString(fileEntry);
 			// System.out.println(content);
 
-			CompilationUnit parse = parse(content.toCharArray());
+			final CompilationUnit parse = parse(content.toCharArray());
 			
 			// count number of classes and print them
-			classInfo(parse, visitor1);
-
+			classInfo(parse, visitorClass);
+			methodInfo(parse, visitorMethod);
 			/*
 			// print methods info
 			printMethodInfo(parse);
@@ -61,8 +64,10 @@ public class Parser {
 			printMethodInvocationInfo(parse);
 			*/
 		}
-		System.out.println("Nombre de classe(s) : " + visitor1.sizeList());
-		visitor1.printTypeDeclaration();
+		System.out.println("Nombre de classe(s) : " + visitorClass.sizeList());
+		visitorClass.printTypeDeclaration();
+		System.out.println("Nombre de methode(s) : " + visitorMethod.sizeList());
+		visitorMethod.printMethodDeclaration();
 	}
 
 	// read all java files from specific folder
@@ -156,9 +161,17 @@ public class Parser {
 		*/
 		
 		
-		// method to accept visitor
-		public static void classInfo(CompilationUnit parse, TypeDeclarationVisitor visitor1) {
-			parse.accept(visitor1);
-		}	
-
+		// methods to accept visitor
+		public static void classInfo(CompilationUnit parse, TypeDeclarationVisitor visitorClass) {
+			parse.accept(visitorClass);
+		}
+		
+		public static void methodInfo(CompilationUnit parse, MethodDeclarationVisitor visitorMethod) {
+			parse.accept(visitorMethod);
+		}
+		
+		// get number of lines in the application
+		public static int countLineNumber(CompilationUnit parse) {
+			return parse.getLineNumber(parse.getLength() - 1);
+		}
 }
