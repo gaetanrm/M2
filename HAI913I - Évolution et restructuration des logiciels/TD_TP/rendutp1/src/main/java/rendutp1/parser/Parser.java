@@ -4,29 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.core.internal.utils.FileUtil;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.internal.compiler.flow.FinallyFlowContext;
-
+import rendutp1.cli.UserInterface;
 import rendutp1.visitor.MethodDeclarationVisitor;
-import rendutp1.visitor.MethodInvocationVisitor;
 import rendutp1.visitor.TypeDeclarationVisitor;
-import rendutp1.visitor.VariableDeclarationFragmentVisitor;
 
 public class Parser {
 	
@@ -34,40 +21,27 @@ public class Parser {
 	public static final String projectPath = "/Users/romero/eclipse-workspace/rendutp1";
 	public static final String projectSourcePath = projectPath + "/src";
 	public static final String jrePath = "/Library/Java/JavaVirtualMachines/jdk-17.0.4.1.jdk";
+	
+	public static UserInterface userCLI = new UserInterface();
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
-		TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
-		MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
+		Scanner scan = new Scanner(System.in);
 		// read java files
 		final File folder = new File(projectSourcePath);
 		ArrayList<File> javaFiles = listJavaFilesForFolder(folder);
-
-		//
-		for (File fileEntry : javaFiles) {
-			String content = FileUtils.readFileToString(fileEntry);
-			// System.out.println(content);
-
-			final CompilationUnit parse = parse(content.toCharArray());
-			
-			// count number of classes and print them
-			classInfo(parse, visitorClass);
-			methodInfo(parse, visitorMethod);
-			/*
-			// print methods info
-			printMethodInfo(parse);
-
-			// print variables info
-			printVariableInfo(parse);
-			
-			//print method invocations
-			printMethodInvocationInfo(parse);
-			*/
+		
+		int indice = 0;
+		while(userCLI.getTypeVisitor() != 14) {
+			userCLI.printCLI(indice, scan);
+			indice++;
+			System.out.println("\n");
+			System.out.println("======================================================");
+			userChoice(userCLI.getTypeVisitor(), javaFiles);
+			System.out.println("======================================================");
+			System.out.println("\n");
+			Thread.sleep(1000);
 		}
-		System.out.println("Nombre de classe(s) : " + visitorClass.sizeList());
-		visitorClass.printTypeDeclaration();
-		System.out.println("Nombre de methode(s) : " + visitorMethod.sizeList());
-		visitorMethod.printMethodDeclaration();
 	}
 
 	// read all java files from specific folder
@@ -105,6 +79,46 @@ public class Parser {
 		parser.setSource(classSource);
 		
 		return (CompilationUnit) parser.createAST(null); // create and parse
+	}
+	
+	//choice made by the user
+	public static void userChoice(int choice, ArrayList<File> javaFiles) throws IOException {
+		
+		TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
+		MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
+		
+		switch(choice) {
+		
+		case 1:
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				final CompilationUnit parse = parse(content.toCharArray());
+				classInfo(parse, visitorClass);
+			}
+			System.out.println("Nombre de classe(s) : " + visitorClass.sizeList());
+			visitorClass.printTypeDeclaration();
+			break;
+			
+		case 2:
+			int nbLines = 0;
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				final CompilationUnit parse = parse(content.toCharArray());
+				nbLines += countLineNumber(parse);
+			}
+			System.out.println("Nombre de ligne(s) : " + nbLines);
+			break;
+			
+		case 3:
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				final CompilationUnit parse = parse(content.toCharArray());
+				methodInfo(parse, visitorMethod);
+			}
+			System.out.println("Nombre de methode(s) : " + visitorMethod.sizeList());
+			visitorMethod.printMethodDeclaration();
+			break;
+		}
 	}
 
 	/*
