@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class TypeDeclarationVisitor extends ASTVisitor {
@@ -20,7 +20,7 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 	}
 	
 	public int sizeList() {
-		return getTypes().size();
+		return types.size();
 	}
 
 	public void printTypeDeclaration() {
@@ -29,6 +29,14 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 			System.out.println("Class: " + type.getName() + ",");
 		}
 		System.out.println("]");
+	}
+	
+	public float averageNumberOfMethods() {
+		int numberOfMethods = 0;
+		for (TypeDeclaration type : types) {
+			numberOfMethods += type.getMethods().length;
+		}
+		return (float)numberOfMethods/types.size();
 	}
 	
 }

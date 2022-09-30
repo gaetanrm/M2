@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import rendutp1.cli.UserInterface;
 import rendutp1.visitor.MethodDeclarationVisitor;
+import rendutp1.visitor.PackageDeclarationVisitor;
 import rendutp1.visitor.TypeDeclarationVisitor;
 
 public class Parser {
@@ -23,6 +24,8 @@ public class Parser {
 	public static final String jrePath = "/Library/Java/JavaVirtualMachines/jdk-17.0.4.1.jdk";
 	
 	public static UserInterface userCLI = new UserInterface();
+	
+	public static CompilationUnit parse;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
@@ -86,15 +89,12 @@ public class Parser {
 		
 		TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
 		MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
+		PackageDeclarationVisitor visitorPackage = new PackageDeclarationVisitor();
 		
 		switch(choice) {
 		
 		case 1:
-			for (File fileEntry : javaFiles) {
-				String content = FileUtils.readFileToString(fileEntry);
-				final CompilationUnit parse = parse(content.toCharArray());
-				classInfo(parse, visitorClass);
-			}
+			parseFilesClass(visitorClass, javaFiles);
 			System.out.println("Nombre de classe(s) : " + visitorClass.sizeList());
 			visitorClass.printTypeDeclaration();
 			break;
@@ -103,20 +103,32 @@ public class Parser {
 			int nbLines = 0;
 			for (File fileEntry : javaFiles) {
 				String content = FileUtils.readFileToString(fileEntry);
-				final CompilationUnit parse = parse(content.toCharArray());
-				nbLines += countLineNumber(parse);
+				parse = parse(content.toCharArray());
+				nbLines += countLineNumber();
 			}
 			System.out.println("Nombre de ligne(s) : " + nbLines);
 			break;
 			
 		case 3:
-			for (File fileEntry : javaFiles) {
-				String content = FileUtils.readFileToString(fileEntry);
-				final CompilationUnit parse = parse(content.toCharArray());
-				methodInfo(parse, visitorMethod);
-			}
+			parseFilesMethod(visitorMethod, javaFiles);
 			System.out.println("Nombre de methode(s) : " + visitorMethod.sizeList());
 			visitorMethod.printMethodDeclaration();
+			break;
+			
+		case 4: 
+			parseFilesPackage(visitorPackage, javaFiles);
+			System.out.println("Nombre de package(s) : " + visitorPackage.sizeList());
+			visitorPackage.printPackageDeclaration();
+			break;
+			
+		case 5: 
+			parseFilesClass(visitorClass, javaFiles);
+			System.out.println("Nombre moyen de methode(s) par classe : " + visitorClass.averageNumberOfMethods());
+			break;
+		
+		case 6:
+			parseFilesMethod(visitorMethod, javaFiles);
+			System.out.println("Nombre moyen de ligne(s) par methode : " + visitorMethod.averageNumberOfLinesPerMethods(parse));
 			break;
 		}
 	}
@@ -173,19 +185,45 @@ public class Parser {
 			}
 		}
 		*/
+		public static void parseFilesClass(TypeDeclarationVisitor visitorClass, ArrayList<File> javaFiles) throws IOException {
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				parse = parse(content.toCharArray());
+				classInfo(visitorClass);
+			}
+		}
 		
+		public static void parseFilesMethod(MethodDeclarationVisitor visitorMethod, ArrayList<File> javaFiles) throws IOException {
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				parse = parse(content.toCharArray());
+				methodInfo(visitorMethod);
+			}
+		}
+		
+		public static void parseFilesPackage(PackageDeclarationVisitor visitorPackage, ArrayList<File> javaFiles) throws IOException {
+			for (File fileEntry : javaFiles) {
+				String content = FileUtils.readFileToString(fileEntry);
+				parse = parse(content.toCharArray());
+				packageInfo(visitorPackage);
+			}
+		}
 		
 		// methods to accept visitor
-		public static void classInfo(CompilationUnit parse, TypeDeclarationVisitor visitorClass) {
+		public static void classInfo(TypeDeclarationVisitor visitorClass) {
 			parse.accept(visitorClass);
 		}
 		
-		public static void methodInfo(CompilationUnit parse, MethodDeclarationVisitor visitorMethod) {
+		public static void methodInfo(MethodDeclarationVisitor visitorMethod) {
 			parse.accept(visitorMethod);
 		}
 		
+		public static void packageInfo(PackageDeclarationVisitor visitorPackage) {
+			parse.accept(visitorPackage);
+		}
+		
 		// get number of lines in the application
-		public static int countLineNumber(CompilationUnit parse) {
+		public static int countLineNumber() {
 			return parse.getLineNumber(parse.getLength() - 1);
 		}
 }

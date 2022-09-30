@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class MethodDeclarationVisitor extends ASTVisitor {
 	List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
@@ -20,7 +20,7 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 	}
 	
 	public int sizeList() {
-		return getMethods().size();
+		return methods.size();
 	}
 	
 	public void printMethodDeclaration() {
@@ -29,5 +29,13 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 			System.out.println("Method: " + method.getName() + ",");
 		}
 		System.out.println("]");
+	}
+	
+	public float averageNumberOfLinesPerMethods(CompilationUnit parse) {
+		int numberOfLines = 0;
+		for(MethodDeclaration method : methods) {
+			numberOfLines += parse.getLineNumber(method.getLength() -1);
+		}
+		return (float)numberOfLines/methods.size();
 	}
 }
