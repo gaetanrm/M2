@@ -36,6 +36,21 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 		for(MethodDeclaration method : methods) {
 			numberOfLines += parse.getLineNumber(method.getLength() -1);
 		}
+		System.out.println("Problème : Certaines methodes ne fonctionnent pas avec getLineNumber() \n");
 		return (float)numberOfLines/methods.size();
+	}
+	
+	public void printMethodWithMaxParam() {
+		int maxNumber = 0;
+		MethodDeclaration bestMethod = null;
+		
+		for (MethodDeclaration method : methods) {
+			if (method.parameters().size() > maxNumber) {
+				maxNumber = method.parameters().size();
+				bestMethod = method;
+			}
+		}
+		System.out.println("Le nombre maximal de paramètre(s) pour une methode dans toute l'application : " + maxNumber);
+		System.out.println("La methode ayant ce nombre de paramètre(s) est : " + bestMethod.getName());
 	}
 }

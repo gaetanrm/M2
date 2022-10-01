@@ -3,6 +3,7 @@ package rendutp1.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -11,6 +12,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+
 import rendutp1.cli.UserInterface;
 import rendutp1.visitor.MethodDeclarationVisitor;
 import rendutp1.visitor.PackageDeclarationVisitor;
@@ -43,7 +48,11 @@ public class Parser {
 			userChoice(userCLI.getTypeVisitor(), javaFiles);
 			System.out.println("======================================================");
 			System.out.println("\n");
-			Thread.sleep(1000);
+			System.out.println("Voulez vous continuer ? Y or N");
+			String charReaded = scan.next();
+			if (charReaded.equals("N")) {
+				System.exit(1);
+			}
 		}
 	}
 
@@ -130,100 +139,117 @@ public class Parser {
 			parseFilesMethod(visitorMethod, javaFiles);
 			System.out.println("Nombre moyen de ligne(s) par methode : " + visitorMethod.averageNumberOfLinesPerMethods(parse));
 			break;
-		}
-	}
-
-	/*
-	// navigate method information
-	public static void printMethodInfo(CompilationUnit parse) {
-		MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
-		parse.accept(visitor);
-
-		for (MethodDeclaration method : visitor.getMethods()) {
-			System.out.println("Method name: " + method.getName()
-					+ " Return type: " + method.getReturnType2());
-		}
-
-	}
-
-	// navigate variables inside method
-	public static void printVariableInfo(CompilationUnit parse) {
-
-		MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
-		parse.accept(visitor1);
-		for (MethodDeclaration method : visitor1.getMethods()) {
-
-			VariableDeclarationFragmentVisitor visitor2 = new VariableDeclarationFragmentVisitor();
-			method.accept(visitor2);
-
-			for (VariableDeclarationFragment variableDeclarationFragment : visitor2
-					.getVariables()) {
-				System.out.println("variable name: "
-						+ variableDeclarationFragment.getName()
-						+ " variable Initializer: "
-						+ variableDeclarationFragment.getInitializer());
+			
+		case 7:
+			parseFilesClass(visitorClass, javaFiles);
+			System.out.println("Nombre moyen de variable(s) par classe : " + visitorClass.averageNumberOfVariables());
+			break;
+			
+		case 8:
+			parseFilesClass(visitorClass, javaFiles);
+			List<TypeDeclaration> topClassByNumberOfMethods = visitorClass.printTypeDeclaration10PourcentMethod();
+			System.out.println("Remarque : Si vous n'avez pas suffisamment de classe dans votre projet pour faire 10%");
+			System.out.println("L'application vous affichera seulement la classe qui contient le plus de methodes \n");
+			System.out.println("Voici les 10% des classes qui possèdent le plus de méthodes : \n");
+			
+			for(TypeDeclaration type : topClassByNumberOfMethods) {
+				System.out.println("Class : " + type.getName());
+				System.out.println("Nombre de methode(s) de celle-ci : " + type.getMethods().length + "\n");
 			}
-
+			break;
+			
+		case 9:
+			parseFilesClass(visitorClass, javaFiles);
+			List<TypeDeclaration> topClassByNumberOfVariables = visitorClass.printTypeDeclaration10PourcentVariable();
+			System.out.println("Remarque : Si vous n'avez pas suffisamment de classe dans votre projet pour faire 10%");
+			System.out.println("L'application vous affichera seulement la classe qui contient le plus de variables \n");
+			System.out.println("Voici les 10% des classes qui possèdent le plus de variables : \n");
+			
+			for(TypeDeclaration type : topClassByNumberOfVariables) {
+				System.out.println("Class : " + type.getName());
+				System.out.println("Nombre de variable(s) de celle-ci : " + type.getFields().length + "\n");
+			}
+			break;
+			
+		case 10:
+			parseFilesClass(visitorClass, javaFiles);
+			List<TypeDeclaration> topClassByNumberMethods = visitorClass.printTypeDeclaration10PourcentMethod();
+			List<TypeDeclaration> topClassByNumberVariables = visitorClass.printTypeDeclaration10PourcentVariable();
+			System.out.println("Voici les classes qui font parties des 10% possédant le plus de variables et de methodes : \n");
+			
+			for(TypeDeclaration typeMethods : topClassByNumberMethods) {
+				for(TypeDeclaration typeVariables : topClassByNumberVariables) {
+					if (typeMethods.getName().toString().equals(typeVariables.getName().toString())) {
+						System.out.println("Class : " + typeMethods.getName());
+						System.out.println("Nombre de variable(s) de celle-ci : " + typeMethods.getFields().length);
+						System.out.println("Nombre de methode(s) de celle-ci : " + typeMethods.getMethods().length + "\n");
+					}
+				}
+			}
+			break;
+			
+		case 11:
+			parseFilesClass(visitorClass, javaFiles);
+			Scanner scanInt = new Scanner(System.in);
+			System.out.println("Veuillez donner un nombre minimal de methodes par classe : ");
+			visitorClass.printTypeDeclarationWithXMethods(scanInt.nextInt());
+			break;
+			
+		case 12:
+			parseFilesClass(visitorClass, javaFiles);
+			visitorClass.print10PourcentMethodPerClass(parse);
+			break;
+			
+		case 13:
+			parseFilesMethod(visitorMethod, javaFiles);
+			visitorMethod.printMethodWithMaxParam();
+			break;
+			
+		case 14:
+			System.exit(1);
 		}
 	}
 	
-	// navigate method invocations inside method
-		public static void printMethodInvocationInfo(CompilationUnit parse) {
-
-			MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
-			parse.accept(visitor1);
-			for (MethodDeclaration method : visitor1.getMethods()) {
-
-				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
-				method.accept(visitor2);
-
-				for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-					System.out.println("method " + method.getName() + " invoc method "
-							+ methodInvocation.getName());
-				}
-
-			}
+	public static void parseFilesClass(TypeDeclarationVisitor visitorClass, ArrayList<File> javaFiles) throws IOException {
+		for (File fileEntry : javaFiles) {
+			String content = FileUtils.readFileToString(fileEntry);
+			parse = parse(content.toCharArray());
+			classInfo(visitorClass);
 		}
-		*/
-		public static void parseFilesClass(TypeDeclarationVisitor visitorClass, ArrayList<File> javaFiles) throws IOException {
-			for (File fileEntry : javaFiles) {
-				String content = FileUtils.readFileToString(fileEntry);
-				parse = parse(content.toCharArray());
-				classInfo(visitorClass);
-			}
-		}
+	}
 		
-		public static void parseFilesMethod(MethodDeclarationVisitor visitorMethod, ArrayList<File> javaFiles) throws IOException {
-			for (File fileEntry : javaFiles) {
-				String content = FileUtils.readFileToString(fileEntry);
-				parse = parse(content.toCharArray());
-				methodInfo(visitorMethod);
-			}
+	public static void parseFilesMethod(MethodDeclarationVisitor visitorMethod, ArrayList<File> javaFiles) throws IOException {
+		for (File fileEntry : javaFiles) {
+			String content = FileUtils.readFileToString(fileEntry);
+			parse = parse(content.toCharArray());
+			methodInfo(visitorMethod);
 		}
+	}
 		
-		public static void parseFilesPackage(PackageDeclarationVisitor visitorPackage, ArrayList<File> javaFiles) throws IOException {
-			for (File fileEntry : javaFiles) {
-				String content = FileUtils.readFileToString(fileEntry);
-				parse = parse(content.toCharArray());
-				packageInfo(visitorPackage);
-			}
+	public static void parseFilesPackage(PackageDeclarationVisitor visitorPackage, ArrayList<File> javaFiles) throws IOException {
+		for (File fileEntry : javaFiles) {
+			String content = FileUtils.readFileToString(fileEntry);
+			parse = parse(content.toCharArray());
+			packageInfo(visitorPackage);
 		}
+	}
 		
-		// methods to accept visitor
-		public static void classInfo(TypeDeclarationVisitor visitorClass) {
-			parse.accept(visitorClass);
-		}
+	// methods to accept visitor
+	public static void classInfo(TypeDeclarationVisitor visitorClass) {
+		parse.accept(visitorClass);
+	}
 		
-		public static void methodInfo(MethodDeclarationVisitor visitorMethod) {
-			parse.accept(visitorMethod);
-		}
+	public static void methodInfo(MethodDeclarationVisitor visitorMethod) {
+		parse.accept(visitorMethod);
+	}
 		
-		public static void packageInfo(PackageDeclarationVisitor visitorPackage) {
-			parse.accept(visitorPackage);
-		}
+	public static void packageInfo(PackageDeclarationVisitor visitorPackage) {
+		parse.accept(visitorPackage);
+	}
 		
-		// get number of lines in the application
-		public static int countLineNumber() {
-			return parse.getLineNumber(parse.getLength() - 1);
-		}
+	// get number of lines in the application
+	public static int countLineNumber() {
+		return parse.getLineNumber(parse.getLength() - 1);
+	}
+	
 }
