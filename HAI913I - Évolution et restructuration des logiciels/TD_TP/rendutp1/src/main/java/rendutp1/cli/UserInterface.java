@@ -32,15 +32,24 @@ public class UserInterface {
 	public void printCLI(int indice, Scanner scanClavier) {
 		
 		if(indice==0) {
-			System.out.println("Bienvenue !\n Choisissez l'option que vous souhaitez :");
+			System.out.println("Bienvenue !\n Quel exercice voulez vous faire ?");
 		} else {
-			System.out.println("Choisissez l'option que vous souhaitez :");
-		}
-		for(int i=0; i < 14; i++) {
-			System.out.println(indChoice[i] + ": " + descriptionChoice.get(i));
+			System.out.println("Choisissez l'exercice que vous souhaitez : ");
 		}
 		
+		System.out.println("1 ou 2");
 		typeVisitor = scanClavier.nextInt();
+		
+		if (typeVisitor == 1) {
+			
+			for(int i=0; i < 14; i++) {
+				System.out.println(indChoice[i] + ": " + descriptionChoice.get(i));
+			}
+			typeVisitor = scanClavier.nextInt();
+		} else {
+			typeVisitor = 0;
+		}
+		
 	}
 
 	public int getTypeVisitor() {

@@ -14,10 +14,12 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import rendutp1.cli.UserInterface;
 import rendutp1.visitor.MethodDeclarationVisitor;
+import rendutp1.visitor.MethodInvocationVisitor;
 import rendutp1.visitor.PackageDeclarationVisitor;
 import rendutp1.visitor.TypeDeclarationVisitor;
 
@@ -98,9 +100,16 @@ public class Parser {
 		
 		TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
 		MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
+		MethodInvocationVisitor visitorMethodInv = new MethodInvocationVisitor();
 		PackageDeclarationVisitor visitorPackage = new PackageDeclarationVisitor();
 		
 		switch(choice) {
+		
+		case 0:
+			parseFilesClass(visitorClass, javaFiles);
+			parseFilesMethod(visitorMethod, javaFiles);
+			printCallGraph(visitorClass, visitorMethodInv);
+			break;
 		
 		case 1:
 			parseFilesClass(visitorClass, javaFiles);
@@ -250,6 +259,28 @@ public class Parser {
 	// get number of lines in the application
 	public static int countLineNumber() {
 		return parse.getLineNumber(parse.getLength() - 1);
+	}
+	
+	public static void printCallGraph(TypeDeclarationVisitor visitorClass, MethodInvocationVisitor visitorMethodInv) {
+		List<Node> graph = new ArrayList<Node>();
+		
+		for(TypeDeclaration type : visitorClass.getTypes()) {
+			
+			for(MethodDeclaration method : type.getMethods()) {
+				
+				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
+				method.accept(visitor2);
+				
+				if (visitor2.getMethods().size() != 0) {
+					System.out.println("\nMethod : " + type.getName() + "." + method.getName());
+
+					for (MethodInvocation methodInvocation : visitor2.getMethods()) {
+						graph.add(new Node(method.getName().toString(), methodInvocation.getName().toString()));
+						System.out.println(" --- calls : " + methodInvocation.getName());
+					}
+				}
+			}
+		}
 	}
 	
 }
