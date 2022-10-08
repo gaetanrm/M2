@@ -149,6 +149,6 @@ public class SudokuBT {
 
 	public static void main(String args[]) {
 		SudokuBT test = new SudokuBT(4);
-		test.findSolution(0,0);
+		test.findSolutionAll(0,0);
 	}
 }
