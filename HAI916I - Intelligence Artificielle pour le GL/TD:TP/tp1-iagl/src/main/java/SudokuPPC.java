@@ -66,17 +66,41 @@ public class SudokuPPC {
 		System.out.println("====================================================================================");
 		System.out.println("\n");
 		System.out.println("Génération d'une solution");
+		System.out.println("\n");
 		new SudokuPPC().solve();
 		System.out.println("\n");
 		System.out.println("====================================================================================");
 		System.out.println("\n");
-		System.out.println("Génération de toutes les solutions");
+		System.out.println("Question 8 - Génération de toutes les solutions");
+		System.out.println("\n");
 		new SudokuPPC().solveAll();
 		System.out.println("\n");
 		System.out.println("====================================================================================");
 		System.out.println("\n");
-		System.out.println("Génération d'une solution pour l'instance de la matrice 9x9");
-		new SudokuPPC().solveFromFile();
+		System.out.println("Question 10 - Génération d'une solution pour l'instance de la grille 9x9");
+		System.out.println("\n");
+		n = SUDOKUSIZE9;
+		s = (int) Math.sqrt(n);
+		String filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/SudokuPPC9x9.txt";
+		new SudokuPPC().solveFromFile(filePath);
+		System.out.println("\n");
+		System.out.println("====================================================================================");
+		System.out.println("\n");
+		System.out.println("Question 11 - Génération d'une solution pour l'instance de la grille 16x16");
+		System.out.println("\n");
+		n = SUDOKUSIZE16;
+		s = (int) Math.sqrt(n);
+		filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/SudokuPPC16x16.txt";
+		new SudokuPPC().solveFromFile(filePath);
+		System.out.println("\n");
+		System.out.println("====================================================================================");
+		System.out.println("\n");
+		System.out.println("Question 12 - Génération d'une solution pour le Greater Than Sudoku 9x9");
+		System.out.println("\n");
+		n = SUDOKUSIZE9;
+		s = (int) Math.sqrt(n);
+		filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/GreaterThanSudoku.txt";
+		new SudokuPPC().solveFromFile(filePath);
 		System.out.println("\n");
 		System.out.println("====================================================================================");
 	}
@@ -104,42 +128,11 @@ public class SudokuPPC {
 
 	}
 	
-	public void solveFromFile() throws IOException {
-		
-		//Sudoku 9x9
-		n = SUDOKUSIZE9;
-		s = (int) Math.sqrt(n);
-		String filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/SudokuPPC9x9.txt";
+	public void solveFromFile(String filePath) throws IOException {
 		
 		buildModel();
 		addConstraintToModel(loadInstanceFromFile(filePath));
 		
-		while(model.getSolver().solve()) {
-			printGrid();
-		}
-		model.getSolver().printStatistics();
-		
-		//Sudoku 16x16
-		n = SUDOKUSIZE16;
-		s = (int) Math.sqrt(n);
-		filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/SudokuPPC16x16.txt";
-		
-		buildModel();
-		addConstraintToModel(loadInstanceFromFile(filePath));
-		
-		while(model.getSolver().solve()) {
-			printGrid();
-		}
-		model.getSolver().printStatistics();
-		
-		//Greater Than Sudoku
-		n = SUDOKUSIZE9;
-		s = (int) Math.sqrt(n);
-		filePath = "/Users/romero/eclipse-workspace/tp1-iagl/src/main/resources/GreaterThanSudoku.txt";
-				
-		buildModel();
-		addConstraintToModel(loadInstanceFromFile(filePath));
-				
 		while(model.getSolver().solve()) {
 			printGrid();
 		}
