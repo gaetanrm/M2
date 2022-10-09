@@ -26,7 +26,7 @@ class SudokuTest {
 		
 		//Same with SudokuPPC
 		begginingTimePPC = System.currentTimeMillis();
-		sudokuPPC.solve(4);	
+		sudokuPPC.solve(n);	
 		endingTimePPC = System.currentTimeMillis();
 		executionTimePPC = endingTimePPC - begginingTimePPC;
 		
@@ -60,7 +60,7 @@ class SudokuTest {
 		
 		//Same with SudokuPPC
 		begginingTimePPC = System.currentTimeMillis();
-		sudokuPPC.solveAll(4);	
+		sudokuPPC.solveAll(n);	
 		endingTimePPC = System.currentTimeMillis();
 		executionTimePPC = endingTimePPC - begginingTimePPC;
 		
