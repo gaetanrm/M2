@@ -150,5 +150,6 @@ public class SudokuBT {
 	public static void main(String args[]) {
 		SudokuBT test = new SudokuBT(4);
 		test.findSolutionAll(0,0);
+		System.out.println("Terminé");
 	}
 }
