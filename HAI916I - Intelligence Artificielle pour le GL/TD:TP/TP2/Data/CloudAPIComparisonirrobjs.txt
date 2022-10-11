@@ -1,0 +1,6 @@
+Azure
+Rekognition
+Google
+Kairos
+Clarifiai
+IBM

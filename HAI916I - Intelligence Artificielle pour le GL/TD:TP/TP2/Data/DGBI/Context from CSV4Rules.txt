@@ -1,0 +1,4 @@
+<4>  Face Detection,Video Analysis => Facial Landmarks,Feature Detection,Emotion
+<4>  Face Detection,OCR => NSFW,Image Analysis
+<4>  Face Detection,Emotion => Facial Landmarks,Feature Detection,Video Analysis
+<4>  Face Detection,Facial Landmarks => Feature Detection,Emotion,Video Analysis

@@ -2,7 +2,10 @@ package rendutp1.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,12 +15,22 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.DefaultAttribute;
+import org.jgrapht.nio.dot.DOTExporter;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
 import rendutp1.cli.UserInterface;
+import rendutp1.utils.Edge;
+import rendutp1.utils.Node;
 import rendutp1.visitor.MethodDeclarationVisitor;
 import rendutp1.visitor.MethodInvocationVisitor;
 import rendutp1.visitor.PackageDeclarationVisitor;
@@ -145,8 +158,8 @@ public class Parser {
 			break;
 		
 		case 6:
-			parseFilesMethod(visitorMethod, javaFiles);
-			System.out.println("Nombre moyen de ligne(s) par methode : " + visitorMethod.averageNumberOfLinesPerMethods(parse));
+			averageNumberOfLinesPerMethods(visitorMethod, javaFiles);
+			System.out.println("Nombre moyen de ligne(s) par methode : " + (float)(visitorMethod.getNumberOfLines()/(float)visitorMethod.getMethods().size()));
 			break;
 			
 		case 7:
@@ -205,8 +218,7 @@ public class Parser {
 			break;
 			
 		case 12:
-			parseFilesClass(visitorClass, javaFiles);
-			visitorClass.print10PourcentMethodPerClass(parse);
+			BestMethodPerClass(visitorClass, javaFiles);
 			break;
 			
 		case 13:
@@ -261,8 +273,28 @@ public class Parser {
 		return parse.getLineNumber(parse.getLength() - 1);
 	}
 	
-	public static void printCallGraph(TypeDeclarationVisitor visitorClass, MethodInvocationVisitor visitorMethodInv) {
-		List<Node> graph = new ArrayList<Node>();
+	public static void averageNumberOfLinesPerMethods(MethodDeclarationVisitor visitorMethod, ArrayList<File> javaFiles) throws IOException {
+		for (File fileEntry : javaFiles) {
+			String content = FileUtils.readFileToString(fileEntry);
+			parse = parse(content.toCharArray());
+			methodInfo(visitorMethod);
+			visitorMethod.numberOfLinesOfMethodsPerFiles(parse);
+		}
+	}
+	
+	public static void BestMethodPerClass(TypeDeclarationVisitor visitorClass, ArrayList<File> javaFiles) throws IOException {
+		System.out.println("Les 10% des méthodes qui ont le plus grand nombre de lignes, par classe");
+		for (File fileEntry : javaFiles) {
+			String content = FileUtils.readFileToString(fileEntry);
+			parse = parse(content.toCharArray());
+			classInfo(visitorClass);
+			visitorClass.print10PourcentMethodPerClass(parse);
+		}
+	}
+	
+	public static void printCallGraph(TypeDeclarationVisitor visitorClass, MethodInvocationVisitor visitorMethodInv) throws IOException {
+		List<Node> listNode = new ArrayList<Node>();
+		List<Edge> listEdge = new ArrayList<Edge>();
 		
 		for(TypeDeclaration type : visitorClass.getTypes()) {
 			
@@ -271,16 +303,47 @@ public class Parser {
 				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
 				method.accept(visitor2);
 				
+				Node nodeMethodDecla = new Node(type.getName().toString() + "." + method.getName().toString());
+				listNode.add(nodeMethodDecla);
+				
+				
 				if (visitor2.getMethods().size() != 0) {
-					System.out.println("\nMethod : " + type.getName() + "." + method.getName());
+//					System.out.println("\nMethod : " + nodeMethodDecla.getNode());
 
 					for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-						graph.add(new Node(method.getName().toString(), methodInvocation.getName().toString()));
-						System.out.println(" --- calls : " + methodInvocation.getName());
+						
+						Node nodeMethodInv = new Node(type.getName().toString() + "." + methodInvocation.getName().toString());
+						listNode.add(nodeMethodInv);
+						listEdge.add(new Edge(nodeMethodDecla.getNode(), nodeMethodInv.getNode()));
+						
+//						System.out.println(" --- calls : " + nodeMethodInv.getNode());
 					}
 				}
 			}
 		}
-	}
-	
+		// Add vertex and edges to the graph
+		Graph<String, DefaultEdge> graph = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+		for (Node node : listNode) {
+			graph.addVertex(node.getNode());
+		}
+		for (Edge edge : listEdge) {
+			graph.addEdge(edge.getNodeSource(), edge.getNodeTarget());
+		}
+		
+//		System.out.println(graph.toString());
+		
+		// Export the graph in a png file
+		DOTExporter<String, DefaultEdge> exporter = new DOTExporter<String, DefaultEdge>();
+	        exporter.setVertexAttributeProvider((v) -> {
+	            Map<String, Attribute> map = new LinkedHashMap<String, Attribute>();
+	            map.put("label", DefaultAttribute.createAttribute(v.toString()));
+	            return map;
+	        });
+	        Writer writer = new StringWriter();
+	        exporter.exportGraph(graph, writer);
+	        MutableGraph g = new guru.nidi.graphviz.parse.Parser().read(writer.toString());
+	        Graphviz.fromGraph(g).height(1000).render(Format.PNG).toFile(new File("example/callGraph.png"));
+//	        System.out.println(writer.toString());
+	        
+	}	
 }

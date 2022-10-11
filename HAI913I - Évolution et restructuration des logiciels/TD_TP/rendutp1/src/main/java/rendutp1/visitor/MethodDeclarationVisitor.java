@@ -9,6 +9,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 public class MethodDeclarationVisitor extends ASTVisitor {
 	List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+	int numberOfLines = 0;
+	int indice = 0;
 	
 	public boolean visit(MethodDeclaration node) {
 		methods.add(node);
@@ -19,6 +21,11 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 		return methods;
 	}
 	
+	
+	public int getNumberOfLines() {
+		return numberOfLines;
+	}
+
 	public int sizeList() {
 		return methods.size();
 	}
@@ -31,13 +38,15 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 		System.out.println("]");
 	}
 	
-	public float averageNumberOfLinesPerMethods(CompilationUnit parse) {
-		int numberOfLines = 0;
-		for(MethodDeclaration method : methods) {
-			numberOfLines += parse.getLineNumber(method.getLength() -1);
+	public void numberOfLinesOfMethodsPerFiles(CompilationUnit parse) {
+		int startLineNumber, endLineNumber;
+		
+		for(int i=indice; i < methods.size(); i++) {
+			startLineNumber = parse.getLineNumber(methods.get(i).getStartPosition());
+			endLineNumber = parse.getLineNumber(methods.get(i).getStartPosition() + methods.get(i).getLength());
+			numberOfLines += (endLineNumber - startLineNumber + 1);
 		}
-		System.out.println("Problème : Certaines methodes ne fonctionnent pas avec getLineNumber() \n");
-		return (float)numberOfLines/methods.size();
+		indice = methods.size();
 	}
 	
 	public void printMethodWithMaxParam() {

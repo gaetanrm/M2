@@ -1,0 +1,27 @@
+digraph G { 
+	rankdir=BT;
+0 [shape=record,style=filled,fillcolor=lightblue,label="{0 (I: 1, E: 6)| Face Detection\n|}"];
+1 [shape=record,style=filled,fillcolor=orange,label="{1 (I: 7, E: 3)|Face Recognition\nSimilar Faces\n|Azure\nRekognition\nKairos\n}"];
+2 [shape=record,style=filled,fillcolor=lightblue,label="{2 (I: 5, E: 4)|Facial Landmarks\nEmotion\nVideo Analysis\n|}"];
+3 [shape=record,style=filled,fillcolor=lightblue,label="{3 (I: 2, E: 5)|Feature Detection\n|}"];
+4 [shape=record,style=filled,fillcolor=lightblue,label="{4 (I: 12, E: 0)|Logo Detection\n|}"];
+5 [shape=record,style=filled,fillcolor=orange,label="{5 (I: 8, E: 3)||Google\nAzure\nRekognition\n}"];
+6 [shape=record,style=filled,label="{6 (I: 4, E: 4)|OCR\n|IBM\n}"];
+7 [shape=record,style=filled,label="{7 (I: 4, E: 4)||Clarifiai\n}"];
+8 [shape=record,style=filled,fillcolor=lightblue,label="{8 (I: 3, E: 5)|NSFW\nImage Analysis\n|}"];
+9 [shape=record,style=filled,fillcolor=orange,label="{9 (I: 4, E: 3)|Custom Model Creation\n|Azure\nClarifiai\nIBM\n}"];
+	1 -> 2
+	2 -> 3
+	3 -> 0
+	4 -> 1
+	4 -> 5
+	4 -> 9
+	5 -> 2
+	5 -> 6
+	5 -> 7
+	6 -> 8
+	7 -> 3
+	7 -> 8
+	8 -> 0
+	9 -> 8
+}

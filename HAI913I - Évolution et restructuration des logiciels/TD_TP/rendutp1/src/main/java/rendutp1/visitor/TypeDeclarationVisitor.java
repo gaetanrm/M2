@@ -9,8 +9,14 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import rendutp1.utils.Pair;
+
 public class TypeDeclarationVisitor extends ASTVisitor {
+	
 	List<TypeDeclaration> types = new ArrayList<TypeDeclaration>();
+	List<Pair> listMethodsWithLines = new ArrayList<Pair>();
+	int numberOfLines = 0;
+	int indice = 0;
 	
 	public boolean visit(TypeDeclaration node) {
 		types.add(node);
@@ -141,47 +147,62 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 	// Prints the 10% of Methods with the best number of lines per Class
 	public void print10PourcentMethodPerClass(CompilationUnit parse) {
 		int indList, indListMax;
-		System.out.println("Les 10% des méthodes qui ont le plus grand nombre de lignes, par classe");
-		System.out.println("Problème : Certaines methodes ne fonctionnent pas avec getLineNumber()" + "\n");
 		
-		for(TypeDeclaration type : types) {
-			List<MethodDeclaration> topMethods = new ArrayList<MethodDeclaration>();
+		for(int i=indice; i < types.size(); i++) {
+			List<Pair> topMethods = new ArrayList<Pair>();
+			MethodDeclaration[] methods = types.get(i).getMethods();
 			indList = 0;
-			indListMax = type.getMethods().length*(1/10);
+			indListMax = methods.length*(1/10);
 			
-			// If type.getMethods().length < 10, then indListMax = 0, 
+			// If methods.length < 10, then indListMax = 0, 
 			// so we put it at 1 by default to be able to see something
 			if (indListMax == 0) {
 				indListMax = 1;
 			}
 				
+			lineNumberPerMethod(parse, methods);
+			
 			while(indList < indListMax) {
-				topMethods.add(bestChoiceMethodLines(type.getMethods(), topMethods, parse));
+				topMethods.add(bestChoiceMethodLines(topMethods));
 				indList++;
 			}
 			
-			System.out.println("Pour la classe : " + type.getName());
-			for(MethodDeclaration method : topMethods) {
-				System.out.println("Method : " + method.getName());
-				System.out.println("Nombre de ligne(s) de celle-ci : " + parse.getLineNumber(method.getLength() -1) + "\n");
+			System.out.println("Pour la classe : " + types.get(i).getName());
+			
+			for(Pair method : topMethods) {
+				System.out.println("Method : " + method.getMethod().getName());
+				System.out.println("Nombre de ligne(s) de celle-ci : " + method.getNumberOfLines() + "\n");
 			}
 		}
+		indice += types.size();
 	}
 	
-	public MethodDeclaration bestChoiceMethodLines(MethodDeclaration[] methods, List<MethodDeclaration> listMethods, CompilationUnit parse) {
-		MethodDeclaration best = null;
+	// Pick the method with the greater number of lines 
+	public Pair bestChoiceMethodLines(List<Pair> listMethods) {
+		Pair best = null;
 		
-		for(MethodDeclaration method : methods) {
-			if (!listMethods.contains(method)) {
+		for(Pair methodAndLines : listMethodsWithLines) {
+			if (!listMethods.contains(methodAndLines)) {
 				if (best == null) {
-					best = method;
+					best = methodAndLines;
 				}else  {
-					if (parse.getLineNumber(method.getLength() -1) > parse.getLineNumber(parse.getExtendedLength(best))) {
-						best = method;
+					if (best.getNumberOfLines() < methodAndLines.getNumberOfLines()) {
+						best = methodAndLines;
 					}
 				}
 			}
 		}
 		return best;
+	}
+	
+	// Add to a list a pair of a method and the lines number of it
+	public void lineNumberPerMethod(CompilationUnit parse, MethodDeclaration[] methods) {
+		int startLineNumber, endLineNumber;
+
+		for(MethodDeclaration method : methods) {
+			startLineNumber = parse.getLineNumber(method.getStartPosition());
+			endLineNumber = parse.getLineNumber(method.getStartPosition() + method.getLength());
+			listMethodsWithLines.add(new Pair(method, (endLineNumber - startLineNumber + 1)));
+		}
 	}
 }

@@ -1,0 +1,8 @@
+ Face Detection
+Feature Detection
+NSFW, Image Analysis
+Facial Landmarks, Emotion, Video Analysis
+OCR
+Face Recognition, Similar Faces
+Custom Model Creation
+Logo Detection

@@ -1,0 +1,5 @@
+<3>  Face Detection,Custom Model Creation => NSFW,Image Analysis
+<3>  Face Detection,Similar Faces => Face Recognition,Facial Landmarks,Feature Detection,Emotion,Video Analysis
+<3>  Face Detection,Feature Detection,OCR,NSFW,Image Analysis => Facial Landmarks,Emotion,Video Analysis
+<3>  Face Detection,Facial Landmarks,Feature Detection,Emotion,NSFW,Image Analysis,Video Analysis => OCR
+<3>  Face Detection,Face Recognition => Facial Landmarks,Feature Detection,Similar Faces,Emotion,Video Analysis

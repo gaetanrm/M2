@@ -1,0 +1,1 @@
+<1>  Face Detection,Facial Landmarks,Feature Detection,Emotion,OCR,NSFW,Image Analysis,Video Analysis,Custom Model Creation => Face Recognition,Similar Faces

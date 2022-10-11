@@ -1,0 +1,2 @@
+<5>  Face Detection,Image Analysis => NSFW
+<5>  Face Detection,NSFW => Image Analysis

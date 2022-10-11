@@ -1,0 +1,7 @@
+Month; Face Detection;Face Recognition;Facial Landmarks;Feature Detection;Similar Faces;Emotion;OCR;NSFW;Image Analysis;Video Analysis;Logo Detection;Custom Model Creation
+Google;1;0;1;1;0;1;1;1;1;1;1;0
+Azure;1;1;1;1;1;1;1;1;1;1;0;1
+Rekognition;1;1;1;1;1;1;1;1;1;1;0;0
+Clarifiai;1;0;0;1;0;0;0;1;1;0;1;1
+IBM;1;0;0;0;0;0;1;1;1;0;0;1
+Kairos;1;1;1;1;1;1;0;0;0;1;0;0
