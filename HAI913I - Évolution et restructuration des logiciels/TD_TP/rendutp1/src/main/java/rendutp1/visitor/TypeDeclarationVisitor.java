@@ -16,7 +16,8 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 	List<TypeDeclaration> types = new ArrayList<TypeDeclaration>();
 	List<Pair> listMethodsWithLines = new ArrayList<Pair>();
 	int numberOfLines = 0;
-	int indice = 0;
+	int indiceClass = 0;
+	int indiceMethod = 0;
 	
 	public boolean visit(TypeDeclaration node) {
 		types.add(node);
@@ -148,7 +149,7 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 	public void print10PourcentMethodPerClass(CompilationUnit parse) {
 		int indList, indListMax;
 		
-		for(int i=indice; i < types.size(); i++) {
+		for(int i=indiceClass; i < types.size(); i++) {
 			List<Pair> topMethods = new ArrayList<Pair>();
 			MethodDeclaration[] methods = types.get(i).getMethods();
 			indList = 0;
@@ -173,15 +174,20 @@ public class TypeDeclarationVisitor extends ASTVisitor {
 				System.out.println("Method : " + method.getMethod().getName());
 				System.out.println("Nombre de ligne(s) de celle-ci : " + method.getNumberOfLines() + "\n");
 			}
+			
+			indiceMethod += methods.length;
 		}
-		indice += types.size();
+
+		indiceClass = types.size();
+		
 	}
 	
 	// Pick the method with the greater number of lines 
 	public Pair bestChoiceMethodLines(List<Pair> listMethods) {
 		Pair best = null;
 		
-		for(Pair methodAndLines : listMethodsWithLines) {
+		for(int i=indiceMethod; i < listMethodsWithLines.size(); i++) {
+			Pair methodAndLines = listMethodsWithLines.get(i);
 			if (!listMethods.contains(methodAndLines)) {
 				if (best == null) {
 					best = methodAndLines;
