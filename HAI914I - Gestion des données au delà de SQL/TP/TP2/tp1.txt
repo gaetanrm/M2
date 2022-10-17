@@ -1,0 +1,36 @@
+
+
+
+Exo1)
+curl -X PUT $COUCH3/romerooccitanie
+
+
+Exo2)
+curl -X POST $COUCH3/romerooccitanie/_bulk_docs -d @DATA/aveyron.json -H "Content-Type:application/json"
+
+curl -X POST $COUCH3/romerooccitanie/_bulk_docs -d @DATA/gard.json -H "Content-Type:application/json"
+
+
+curl -X POST $COUCH3/romerooccitanie/_bulk_docs -d @DATA/hauteGaronne.json -H "Content-Type:application/json"
+
+
+curl -X POST $COUCH3/romerooccitanie/_bulk_docs -d @DATA/herault.json -H "Content-Type:application/json"
+
+
+curl -X POST $COUCH3/romerooccitanie/_bulk_docs -d @DATA/regions_partiel.json -H "Content-Type:application/json"
+
+III)
+
+1)
+curl -X GET $COUCH3
+
+2)
+curl -X GET $COUCH3/romerooccitanie
+257 document
+
+3)
+curl -X GET $COUCH3/romerooccitanie/_all_docs
+
+4)
+
+curl -X GET $COUCH3/romerotoccitanie/91/
