@@ -1,0 +1,37 @@
+digraph G { 
+	rankdir=BT;
+subgraph Animals { 
+label="Animals";
+13 [shape=record,label="{Concept_Animals_13||}"];
+14 [shape=record,label="{Concept_Animals_14|flies\n|}"];
+15 [shape=record,label="{Concept_Animals_15|nocturnal\n|bat\n}"];
+16 [shape=record,label="{Concept_Animals_16||}"];
+17 [shape=record,label="{Concept_Animals_17||}"];
+18 [shape=record,label="{Concept_Animals_18|feathered\n|ostrich\n}"];
+19 [shape=record,label="{Concept_Animals_19|migratory\n|greater-flamingo\nlittle-tern\n}"];
+20 [shape=record,label="{Concept_Animals_20||arctic-tern\n}"];
+21 [shape=record,label="{Concept_Animals_21|red-bill\n|silver-gull\n}"];
+22 [shape=record,label="{Concept_Animals_22|elytra\nsix-legged\n|ladybird\n}"];
+23 [shape=record,label="{Concept_Animals_23|sea-habitat\n|great-auk\n}"];
+24 [shape=record,label="{Concept_Animals_24|wood-habitat\n|wood-pecker\n}"];
+25 [shape=record,label="{Concept_Animals_25|eats-fish\nwater-habitat\n|giant-otter\n}"];
+	14 -> 13
+	18 -> 13
+	25 -> 13
+	15 -> 14
+	17 -> 14
+	22 -> 14
+	16 -> 15
+	23 -> 17
+	24 -> 17
+	17 -> 18
+	20 -> 19
+	16 -> 20
+	20 -> 21
+	16 -> 22
+	19 -> 23
+	21 -> 23
+	16 -> 24
+	23 -> 25
+}
+}

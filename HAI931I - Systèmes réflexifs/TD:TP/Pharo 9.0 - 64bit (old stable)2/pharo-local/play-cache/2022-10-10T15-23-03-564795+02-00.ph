@@ -1,0 +1,1 @@
+p := Pile new: 4.p push: 33.p exoInspect.

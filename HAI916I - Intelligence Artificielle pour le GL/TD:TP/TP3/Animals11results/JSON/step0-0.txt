@@ -1,0 +1,1 @@
+Animals: step=1 nb.concepts=13 nb.attrib rel.=0

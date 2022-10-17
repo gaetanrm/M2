@@ -1,0 +1,5 @@
+Animals: step=1 nb.concepts=13 nb.attrib rel.=0
+time:69 ms
+Animals: step=2 nb.concepts=13 nb.attrib rel.=0
+time:3 ms
+total time: 87

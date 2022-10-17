@@ -1,0 +1,1 @@
+c1 := Counter create.c2 := Counter create.c1 value.c2 value.p := 0.[ p := p + 1 ] repeatUntil: [p = 5 ].p.p := Pile new: 5.p push: 33.p exoInspect.
