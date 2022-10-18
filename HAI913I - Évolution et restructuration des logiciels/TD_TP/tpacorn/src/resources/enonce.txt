@@ -1,0 +1,6 @@
+-> Faire un programme JS qui parse un programme JS (acorn)
+-> Créer  une représentation intermédiaire pour le coeur du programme (new, function, class, call, affectation)
+-> Créer un métamodèle qui représente le programme JS
+-> Faire un graphe d'appel du programme JS (vis.js, sigma.js) en utilisant RA / CHA / RTA et Taint analysis.
+-> Bonus : enhance IR to manage field
+-> Bonus 2 : enhance IR to manage closure
