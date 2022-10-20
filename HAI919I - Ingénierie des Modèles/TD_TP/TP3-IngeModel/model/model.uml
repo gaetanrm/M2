@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_rKVOoEruEe2-MperVQvS9w" name="model">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_rSyAAEruEe2-MperVQvS9w">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_t_nZsEruEe2-MperVQvS9w" name="AssociatedClass" classifierBehavior="__NXfIEruEe2-MperVQvS9w">
+    <ownedBehavior xmi:type="uml:StateMachine" xmi:id="__NXfIEruEe2-MperVQvS9w" name="StateMachine1">
+      <region xmi:type="uml:Region" xmi:id="__miNEEruEe2-MperVQvS9w" name="Region1">
+        <transition xmi:type="uml:Transition" xmi:id="_Xm2p4FB-Ee2Vi8IUymRJqg" source="_RVic0FB-Ee2Vi8IUymRJqg" target="_Hrv4EFB-Ee2Vi8IUymRJqg"/>
+        <transition xmi:type="uml:Transition" xmi:id="_Zr_KYFB-Ee2Vi8IUymRJqg" name="m()" source="_Hrv4EFB-Ee2Vi8IUymRJqg" target="_HRgMEFB-Ee2Vi8IUymRJqg">
+          <trigger xmi:type="uml:Trigger" xmi:id="_ovABIFB_Ee2Vi8IUymRJqg" name="trigger1" event="_oh9qsFB_Ee2Vi8IUymRJqg"/>
+        </transition>
+        <transition xmi:type="uml:Transition" xmi:id="_atkjMFB-Ee2Vi8IUymRJqg" source="_HRgMEFB-Ee2Vi8IUymRJqg" target="_TCo30FB-Ee2Vi8IUymRJqg"/>
+        <transition xmi:type="uml:Transition" xmi:id="_jQto8FB-Ee2Vi8IUymRJqg" name="m()" source="_HRgMEFB-Ee2Vi8IUymRJqg" target="_Hrv4EFB-Ee2Vi8IUymRJqg"/>
+        <subvertex xmi:type="uml:State" xmi:id="_HRgMEFB-Ee2Vi8IUymRJqg" name="State1"/>
+        <subvertex xmi:type="uml:State" xmi:id="_Hrv4EFB-Ee2Vi8IUymRJqg" name="State2">
+          <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_fnS1wFB_Ee2Vi8IUymRJqg" name="EntryPoint1" kind="entryPoint"/>
+        </subvertex>
+        <subvertex xmi:type="uml:Pseudostate" xmi:id="_RVic0FB-Ee2Vi8IUymRJqg" name="Initial4"/>
+        <subvertex xmi:type="uml:FinalState" xmi:id="_TCo30FB-Ee2Vi8IUymRJqg" name="FinalState5"/>
+      </region>
+    </ownedBehavior>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_oUYhsFB_Ee2Vi8IUymRJqg" name="operation1"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:CallEvent" xmi:id="_oh9qsFB_Ee2Vi8IUymRJqg" name="callEvent1" operation="_oUYhsFB_Ee2Vi8IUymRJqg"/>
+  <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_d7wWcFB-Ee2Vi8IUymRJqg">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d71O8FB-Ee2Vi8IUymRJqg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+    </eAnnotations>
+    <appliedProfile xmi:type="uml:Profile" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+  </profileApplication>
+</uml:Model>
