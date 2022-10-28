@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/TPNoteROMEROGARCIA/src" modelPluginID="TPNoteROMEROGARCIA"
+    modelName="Metamodele" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>metamodele.ecore</foreignModel>
+  <genPackages prefix="Paa" disposableProviderFactory="true" ecorePackage="metamodele.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="metamodele.ecore#//FieldBasicType">
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//FieldBasicType/int"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//FieldBasicType/float"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//FieldBasicType/String"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="metamodele.ecore#//BasicQueryType">
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//BasicQueryType/save"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//BasicQueryType/delete"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//BasicQueryType/findAll"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//BasicQueryType/count"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="metamodele.ecore#//FieldDependantQueryType">
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//FieldDependantQueryType/findBy"/>
+      <genEnumLiterals ecoreEnumLiteral="metamodele.ecore#//FieldDependantQueryType/deleteBy"/>
+    </genEnums>
+    <genClasses ecoreClass="metamodele.ecore#//Entity">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference metamodele.ecore#//Entity/superEntity"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference metamodele.ecore#//Entity/fields"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute metamodele.ecore#//Entity/name"/>
+    </genClasses>
+    <genClasses ecoreClass="metamodele.ecore#//PaAModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference metamodele.ecore#//PaAModel/entities"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference metamodele.ecore#//PaAModel/repositories"/>
+    </genClasses>
+    <genClasses ecoreClass="metamodele.ecore#//Repository">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference metamodele.ecore#//Repository/typeEntity"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference metamodele.ecore#//Repository/queries"/>
+    </genClasses>
+    <genClasses ecoreClass="metamodele.ecore#//Field">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute metamodele.ecore#//Field/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute metamodele.ecore#//Field/type"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference metamodele.ecore#//Field/entity"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="metamodele.ecore#//Query"/>
+    <genClasses ecoreClass="metamodele.ecore#//FieldDependantQuery">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference metamodele.ecore#//FieldDependantQuery/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute metamodele.ecore#//FieldDependantQuery/type"/>
+    </genClasses>
+    <genClasses ecoreClass="metamodele.ecore#//BasicQuery">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute metamodele.ecore#//BasicQuery/type"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
