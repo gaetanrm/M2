@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendautolayout" value="true"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and mandatory="true" name="BrightnessMechanism">
+			<feature name="DisplayAutoBrightness"/>
+			<alt mandatory="true" name="ManualDisplayBrightnessLevel">
+				<feature name="IntervalValue"/>
+				<and abstract="true" name="AbstractFeature">
+					<feature mandatory="true" name="IncreaseBrightness"/>
+					<feature mandatory="true" name="DecreaseBrightness"/>
+				</and>
+			</alt>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>DisplayAutoBrightness</var>
+				<var>IntervalValue</var>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>

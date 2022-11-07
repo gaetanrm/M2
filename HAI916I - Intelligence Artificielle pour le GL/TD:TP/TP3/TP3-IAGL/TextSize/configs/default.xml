@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+	<feature name="TextSize"/>
+	<feature name="TextSizeMechanism"/>
+	<feature name="ThingsAreaTextSize"/>
+	<feature name="CaptionStyle"/>
+	<feature name="Menus"/>
+	<feature name="Icons"/>
+	<feature name="PaletteTitles"/>
+	<feature name="Tooltips"/>
+	<feature name="MessageBoxes"/>
+	<feature name="TitleBars"/>
+	<feature name="CursorSize"/>
+	<feature name="CursorSize_IntervalValue"/>
+	<feature name="CursorSize_Normal"/>
+	<feature name="CursorSize_Small"/>
+	<feature name="CursorSize_Large"/>
+	<feature name="Font"/>
+	<feature name="Police"/>
+	<feature name="FontSettings"/>
+	<feature name="VoiceOverVisual"/>
+	<feature name="VoiceOverLargeCursor"/>
+	<feature name="VoiceOverMenuFontSize"/>
+	<feature name="BraillePanelFontSize"/>
+	<feature name="CaptionPanelFontSize"/>
+	<feature name="VoiceOverBrailleLayout"/>
+	<feature name="ShowExtendedTextStyle"/>
+	<feature name="ShowTextStyle"/>
+	<feature name="Size"/>
+	<feature name="Very_Small_Size"/>
+	<feature name="Small_Size"/>
+	<feature name="Normal_Size"/>
+	<feature name="Large_Size"/>
+	<feature name="Very_Large_Size"/>
+	<feature name="IntervalValue_Size"/>
+	<feature name="Style"/>
+	<feature name="Default_Style"/>
+	<feature name="Classic_Style"/>
+	<feature name="CreateNewStyle"/>
+	<feature name="Bold"/>
+	<feature name="Preview"/>
+</configuration>

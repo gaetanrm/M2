@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendautolayout" value="true"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and abstract="true" mandatory="true" name="TextSize">
+			<and mandatory="true" name="TextSizeMechanism">
+				<alt mandatory="true" name="ThingsAreaTextSize">
+					<feature name="CaptionStyle"/>
+					<and name="Menus">
+						<and mandatory="true" name="Icons">
+							<and mandatory="true" name="PaletteTitles">
+								<and mandatory="true" name="Tooltips">
+									<and mandatory="true" name="MessageBoxes">
+										<feature mandatory="true" name="TitleBars"/>
+									</and>
+								</and>
+							</and>
+						</and>
+					</and>
+				</alt>
+				<alt name="CursorSize">
+					<feature name="CursorSize_IntervalValue"/>
+					<and name="CursorSize_Normal">
+						<and mandatory="true" name="CursorSize_Small">
+							<feature mandatory="true" name="CursorSize_Large"/>
+						</and>
+					</and>
+				</alt>
+				<and name="Font">
+					<feature mandatory="true" name="Police"/>
+					<feature name="FontSettings"/>
+				</and>
+				<alt name="VoiceOverVisual">
+					<feature name="VoiceOverLargeCursor"/>
+					<and name="VoiceOverMenuFontSize">
+						<and mandatory="true" name="BraillePanelFontSize">
+							<feature mandatory="true" name="CaptionPanelFontSize"/>
+						</and>
+					</and>
+				</alt>
+				<and name="VoiceOverBrailleLayout">
+					<feature name="ShowExtendedTextStyle"/>
+					<feature name="ShowTextStyle"/>
+				</and>
+			</and>
+			<and mandatory="true" name="Size">
+				<feature name="Very_Small_Size"/>
+				<and name="Normal_Size">
+					<feature mandatory="true" name="Small_Size"/>
+				</and>
+				<feature name="Large_Size"/>
+				<feature name="Very_Large_Size"/>
+				<feature name="IntervalValue_Size"/>
+			</and>
+			<or name="Style">
+				<and name="Default_Style">
+					<and mandatory="true" name="Classic_Style">
+						<feature mandatory="true" name="CreateNewStyle"/>
+					</and>
+				</and>
+				<feature name="Bold"/>
+			</or>
+			<feature name="Preview"/>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>Normal_Size</var>
+				<var>Large_Size</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>Bold</var>
+				<not>
+					<var>Normal_Size</var>
+				</not>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>

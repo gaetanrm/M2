@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+	<feature name="BrightnessMechanism"/>
+	<feature name="DisplayAutoBrightness"/>
+	<feature name="ManualDisplayBrightnessLevel"/>
+	<feature name="IntervalValue"/>
+	<feature name="AbstractFeature"/>
+	<feature name="IncreaseBrightness"/>
+	<feature name="DecreaseBrightness"/>
+</configuration>
