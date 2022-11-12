@@ -17,12 +17,15 @@ public class Clustering {
 	// The main method of the class
 	// Use it for the 2nd exercise
 	// It makes the right calls and prints what is expected 
-	public static void clustering() throws IOException, InterruptedException {
+	public static void clustering(Scanner userEntry) throws IOException {
 
 		ArrayList<String> listCluster = createListClusterWithDotFile("target/couplingGraph.dot");
 		ArrayList<Pair<String, String>> listPair = new ArrayList<Pair<String, String>>();
 		double minimumForClustering;
 
+		System.out.println("Démarrage du clustering : ");
+		System.out.println("\n");
+		
 		while (clusteringChoice(listCluster, listPair)) {
 
 			
@@ -53,14 +56,18 @@ public class Clustering {
 		}
 		
 		System.out.println("Clustering terminé");
-	
+		System.out.println("==========================");
+		
+		System.out.println("\n");
+		System.out.println("==========================");
+		System.out.println("Démarrage du clustering avec un couplage minimum : ");
+		System.out.println("\n");
+		
 		// We ask the user to enter a double
 		// And we use it for the clusteringWithMinimumCoupling() method
 		System.out.println("Veuillez rentrer un nombre(de type double) : ");
 		
-		try (Scanner userEntry = new Scanner(System.in)) {
-			minimumForClustering = userEntry.nextDouble();
-		}
+		minimumForClustering = userEntry.nextDouble();
 		clusteringWithMinimumCoupling(minimumForClustering, listPair.size(), listPair);
 		
 		System.out.println("\n");
@@ -71,12 +78,13 @@ public class Clustering {
 			
 			System.out.println(pair.getLeft() + " avec " + pair.getRight());
 		}
+		System.out.println("\n");
 	}
 
 	// We transform the DOT File obtained within the first TP in a MutableGraph to
 	// manipulate it
 	// And we use it to create a list of MutableNode
-	public static ArrayList<String> createListClusterWithDotFile(String filePath) throws IOException {
+	protected static ArrayList<String> createListClusterWithDotFile(String filePath) throws IOException {
 
 		ArrayList<String> listCluster = new ArrayList<String>();
 
@@ -103,7 +111,7 @@ public class Clustering {
 	// This method chooses a new cluster among the list
 	// Each member in the list is a cluster symbolized with a string
 	// A cluster is a class or a concatenation of class
-	public static boolean clusteringChoice(ArrayList<String> listCluster, ArrayList<Pair<String, String>> listPair) throws IOException {
+	protected static boolean clusteringChoice(ArrayList<String> listCluster, ArrayList<Pair<String, String>> listPair) throws IOException {
 
 		double coupling = 0.0, testClusterCoupling = 0.0;
 		String cluster1 = "", cluster2 = "";
@@ -167,8 +175,8 @@ public class Clustering {
 
 								for (int k = 0; k < indSecond - 1; k++) {
 
-									testClusterCoupling += Coupling.coupling(firstCluster[t], secondCluster[k])
-											+ Coupling.coupling(firstCluster[t], secondCluster[k + 1]);
+									testClusterCoupling += Coupling.coupling(firstCluster[t], secondCluster[k], null)
+											+ Coupling.coupling(firstCluster[t], secondCluster[k + 1], null);
 								}
 							}
 							// If the coupling obtained previously is greater than the actual one
@@ -184,7 +192,7 @@ public class Clustering {
 
 							for (int t = 0; t <= indFirst - 1; t++) {
 
-								testClusterCoupling += Coupling.coupling(firstCluster[t], listCluster.get(j));
+								testClusterCoupling += Coupling.coupling(firstCluster[t], listCluster.get(j), null);
 							}
 							if (testClusterCoupling > coupling) {
 
@@ -200,7 +208,7 @@ public class Clustering {
 
 							for (int k = 0; k <= indSecond - 1; k++) {
 
-								testClusterCoupling += Coupling.coupling(listCluster.get(i), secondCluster[k]);
+								testClusterCoupling += Coupling.coupling(listCluster.get(i), secondCluster[k], null);
 							}
 							if (testClusterCoupling > coupling) {
 
@@ -211,9 +219,9 @@ public class Clustering {
 						} 
 						else {
 
-							if (Coupling.coupling(listCluster.get(i), listCluster.get(j)) > coupling) {
+							if (Coupling.coupling(listCluster.get(i), listCluster.get(j), null) > coupling) {
 
-								coupling = Coupling.coupling(listCluster.get(i), listCluster.get(j));
+								coupling = Coupling.coupling(listCluster.get(i), listCluster.get(j), null);
 								cluster1 = listCluster.get(i);
 								cluster2 = listCluster.get(j);
 							}
@@ -249,7 +257,7 @@ public class Clustering {
 	// Each class is contained in only one module
 	// Each module have to contains classes of just one cluster
 	// The average coupling of the module musn't be lower than the parameter (minimumCoupling)
-	public static void clusteringWithMinimumCoupling(double minimumCoupling, int sizeList, ArrayList<Pair<String, String>> listPair) throws IOException, InterruptedException {
+	protected static void clusteringWithMinimumCoupling(double minimumCoupling, int sizeList, ArrayList<Pair<String, String>> listPair) throws IOException {
 
 		// List of all the pairs we need to remove
 		ArrayList<Pair<String, String>> listOfPairsToRemove = new ArrayList<Pair<String, String>>();
@@ -259,7 +267,7 @@ public class Clustering {
 		// than the minimum required
 		for (Pair<String, String> pair : listPair) {
 			
-			double coupling = getPairCoupling(pair, sizeList);
+			double coupling = getPairCoupling(pair, sizeList, listPair);
 			
 			if (coupling < minimumCoupling) {
 				
@@ -298,7 +306,7 @@ public class Clustering {
 	}
 	
 	// Get the coupling for a pair of clusters
-	public static double getPairCoupling(Pair<String, String> pair, int sizeList) throws IOException {
+	protected static double getPairCoupling(Pair<String, String> pair, int sizeList, ArrayList<Pair<String, String>> listPair) throws IOException {
 		
 		String leftSideOfPair = pair.getLeft(), rightSideOfPair = pair.getRight();
 		String[] leftSplitted = new String[]{leftSideOfPair}, rightSplitted = new String[]{rightSideOfPair};
@@ -326,7 +334,7 @@ public class Clustering {
 			
 			for (int j = 0; j <= rightIndex - 1; j++) {
 
-				coupling += Coupling.coupling(leftSplitted[i], rightSplitted[j]);
+				coupling += Coupling.coupling(leftSplitted[i], rightSplitted[j], listPair);
 			}
 		}
 
@@ -334,7 +342,7 @@ public class Clustering {
 	}
 	
 	// Remove one cluster if it's contained in another
-	public static boolean removeCluster(Pair<String, String> clusterToRemove, ArrayList<Pair<String, String>> listPair) throws InterruptedException {
+	protected static boolean removeCluster(Pair<String, String> clusterToRemove, ArrayList<Pair<String, String>> listPair) {
 		
 		// We store the two member of the cluster
 		String firstTestedString = clusterToRemove.getLeft();
@@ -362,7 +370,7 @@ public class Clustering {
 	}
 	
 	// Split a string with a symbol
-	public static Pair<Integer, String[]> splitString(String symbol, String stringToSplit) {
+	protected static Pair<Integer, String[]> splitString(String symbol, String stringToSplit) {
 		
 		String resultArray[] = new String[stringToSplit.length()];
 		int index = 0;
@@ -380,7 +388,7 @@ public class Clustering {
 	}
 	
 	// Just to remove a list of pairs from a list
-	public static void removePairsFromListOfPairs(ArrayList<Pair<String, String>> listOfPairsToRemove, ArrayList<Pair<String, String>> listPair) {
+	protected static void removePairsFromListOfPairs(ArrayList<Pair<String, String>> listOfPairsToRemove, ArrayList<Pair<String, String>> listPair) {
 		
 		for (Pair<String, String> pair : listOfPairsToRemove) {
 					

@@ -26,6 +26,7 @@ import guru.nidi.graphviz.model.LinkTarget;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import guru.nidi.graphviz.parse.Parser;
+import tp2.spoon.parsers.SpoonParser;
 import tp2.utils.Pair;
 
 public class Coupling {
@@ -33,7 +34,7 @@ public class Coupling {
 	// We transform the DOT File obtained within the first TP in a MutableGraph to
 	// manipulate it
 	// And we use it to create a list of pairs of Link
-	public static ArrayList<Pair<String, String>> createPairWithDotFile(String filePath) throws IOException {
+	protected static ArrayList<Pair<String, String>> createPairWithDotFile(String filePath) throws IOException {
 
 		ArrayList<Pair<LinkSource, LinkTarget>> listPair = new ArrayList<Pair<LinkSource, LinkTarget>>();
 
@@ -47,14 +48,12 @@ public class Coupling {
 			listPair.add(new Pair<LinkSource, LinkTarget>(edge.from(), edge.to()));
 		}
 
-		ArrayList<Pair<String, String>> listPairString = simplifyListOfPairs(listPair, graphFromFile);
-
-		return listPairString;
+		return simplifyListOfPairs(listPair, graphFromFile);
 	}
 
 	// We simplify the list of pairs to have the label instead of a Link
 	// Thanks to that, we just can manipulate strings instead of links
-	public static ArrayList<Pair<String, String>> simplifyListOfPairs(ArrayList<Pair<LinkSource, LinkTarget>> listPair,
+	protected static ArrayList<Pair<String, String>> simplifyListOfPairs(ArrayList<Pair<LinkSource, LinkTarget>> listPair,
 			MutableGraph graphFromFile) {
 
 		ArrayList<Pair<String, String>> listPairString = new ArrayList<Pair<String, String>>();
@@ -90,9 +89,13 @@ public class Coupling {
 	// In few words, it calculates the number of calls between methods of class A
 	// and class B
 	// And return the difference between that and the total number of calls
-	public static double coupling(String classA, String classB) throws IOException {
+	public static double coupling(String classA, String classB, ArrayList<Pair<String, String>> listPair) throws IOException {
 
-		ArrayList<Pair<String, String>> listPair = createPairWithDotFile("src/main/resources/callGraph.dot");
+		if (listPair == null) {
+			
+			listPair = createPairWithDotFile("src/main/resources/callGraph.dot");
+		}
+		
 		int numberOfCalls = 0;
 
 		for (Pair<String, String> pair : listPair) {
@@ -120,9 +123,12 @@ public class Coupling {
 	// To create a coupling graph of all classes in an application
 	// We use JGrapht library to do it
 	// It allows to create a simple Graph directed or not and weighted or not
-	public static void createCouplingGraph() throws IOException {
+	public static void createCouplingGraph(ArrayList<Pair<String, String>> listPair) throws IOException {
 
-		ArrayList<Pair<String, String>> listPair = createPairWithDotFile("src/main/resources/callGraph.dot");
+		if (listPair == null) {
+			
+			listPair = createPairWithDotFile("src/main/resources/callGraph.dot");
+		}
 		ArrayList<String> listClass = new ArrayList<>();
 		Graph<String, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
@@ -161,7 +167,7 @@ public class Coupling {
 
 			for (int j = i + 1; j < listClass.size() - 1; j++) {
 
-				double coupling = coupling(listClass.get(i), listClass.get(j));
+				double coupling = coupling(listClass.get(i), listClass.get(j), listPair);
 
 				if (coupling > 0) {
 					// Add the second class as a node if it's paired with the first class somewhere
