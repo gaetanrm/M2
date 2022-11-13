@@ -312,9 +312,21 @@ public class Parser {
 
 					for (MethodInvocation methodInvocation : visitor2.getMethods()) {
 						
-						Node nodeMethodInv = new Node(type.getName().toString() + "." + methodInvocation.getName().toString());
-						listNode.add(nodeMethodInv);
-						listEdge.add(new Edge(nodeMethodDecla.getNode(), nodeMethodInv.getNode()));
+						if (methodInvocation.getExpression() != null) {
+							
+							if (methodInvocation.getExpression().resolveTypeBinding() != null) {
+								
+								Node nodeMethodInv = new Node(methodInvocation.getExpression().resolveTypeBinding().getName() + "." + methodInvocation.getName().toString());
+								listNode.add(nodeMethodInv);
+								listEdge.add(new Edge(nodeMethodDecla.getNode(), nodeMethodInv.getNode()));
+							}
+						}
+						else {
+							
+							Node nodeMethodInv = new Node(methodInvocation.getName().toString());
+							listNode.add(nodeMethodInv);
+							listEdge.add(new Edge(nodeMethodDecla.getNode(), nodeMethodInv.getNode()));
+						}
 						
 //						System.out.println(" --- calls : " + nodeMethodInv.getNode());
 					}
@@ -341,6 +353,7 @@ public class Parser {
 	        });
 	        Writer writer = new StringWriter();
 	        exporter.exportGraph(graph, writer);
+	        exporter.exportGraph(graph, new File("example/callGraph.dot")); // To DOT File
 	        MutableGraph g = new guru.nidi.graphviz.parse.Parser().read(writer.toString());
 	        Graphviz.fromGraph(g).height(1000).render(Format.PNG).toFile(new File("example/callGraph.png"));
 //	        System.out.println(writer.toString());
