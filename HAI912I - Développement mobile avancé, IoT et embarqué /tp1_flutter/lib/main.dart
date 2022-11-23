@@ -31,6 +31,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Center(
           child: Text('Home'),
         ),
@@ -65,7 +66,7 @@ class ProfileHomePage extends StatelessWidget {
             child: Text('Profile'),
           ),
       ),
-      body: BodyApp(),
+      body: const BodyApp(),
     );
   }
 /*  Container _getCard() {}
@@ -73,7 +74,7 @@ class ProfileHomePage extends StatelessWidget {
 }
  
 class BodyApp extends StatelessWidget {
-  BodyApp({Key? key}) : super(key: key);
+  const BodyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
