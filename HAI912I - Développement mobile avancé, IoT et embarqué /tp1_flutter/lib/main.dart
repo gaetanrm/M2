@@ -8,15 +8,52 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp( // une application utilisant Material Design
-        title: 'My First Flutter App',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey),
           textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.white)),
-        ), // données relatives au thème choisi
-        home: const ProfileHomePage(), // le widget de la page d'accueil
+        ),
+        initialRoute: '/',
+        routes: {
+          // When navigating to the "/" route, build the Home widget.
+          '/': (context) => const HomePage(),
+          // When navigating to the "/second" route, build the Profile widget.
+          '/profile': (context) => const ProfileHomePage(),
+          // données relatives au thème choisi
+        }
     );
   }
 }
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text('Home'),
+        ),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32.0)),
+            minimumSize: const Size(200, 60), //////// HERE
+            textStyle: const TextStyle(fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+          child: const Text('Profile'),
+        ),
+      ),
+    );
+  }
+}
+
 // Le widget de notre page d'accueil
 class ProfileHomePage extends StatelessWidget {
   const ProfileHomePage({Key? key}) : super(key: key);
@@ -27,8 +64,6 @@ class ProfileHomePage extends StatelessWidget {
           title: const Center(
             child: Text('Profile'),
           ),
-
-          centerTitle: false,
       ),
       body: BodyApp(),
     );
@@ -87,7 +122,9 @@ class BodyApp extends StatelessWidget {
                 minimumSize: const Size(200, 60), //////// HERE
                 textStyle: const TextStyle(fontSize: 20),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
               child: const Text('Retour'),
             ),
           ]
