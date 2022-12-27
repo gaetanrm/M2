@@ -60,6 +60,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/perceval.png
+    - assets/images/year.png
+    - assets/images/flutter.png
+    - assets/images/pineapple.png
+    - assets/images/montpellier.png
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
